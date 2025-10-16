@@ -1,0 +1,24 @@
+/* Estilos personalizados para el logo MI SUPER */
+.brand-link {
+    font-weight: 800;
+}
+
+.brand-link .logo-xs,
+.brand-link .logo-lg {
+    font-size: 1.8rem;
+    letter-spacing: 1px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Estilo específico para "MI" */
+.brand-link b {
+    color: #007bff;
+    font-weight: 900;
+    font-size: 2rem;
+}
+
+/* Estilo específico para "SUPER" */
+.brand-link .super-text {
+    color: #28a745;
+    font-weight: 700;
+}
