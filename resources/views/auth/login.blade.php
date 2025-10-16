@@ -1,48 +1,111 @@
-<x-guest-layout>
-    <x-authentication-card>
-        <x-slot name="logo">
-            <x-authentication-card-logo />
-        </x-slot>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Login</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <x-validation-errors class="mb-4" />
+	<!--===============================================================================================-->	
+	<link rel="icon" type="image/png" href="{{ asset('assets/images/icons/favicon.ico') }}"/>
+	<link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/bootstrap/css/bootstrap.min.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ asset('assets/fonts/font-awesome-4.7.0/css/font-awesome.min.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/animate/animate.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/css-hamburgers/hamburgers.min.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/select2/select2.min.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/util.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/main.css') }}">
+</head>
 
-        @session('status')
-            <div class="mb-4 font-medium text-sm text-green-600 dark:text-green-400">
-                {{ $value }}
-            </div>
-        @endsession
+<body>
+	<div class="limiter">
+		<div class="container-login100">
+			<div class="wrap-login100">
+				<div class="login100-pic js-tilt" data-tilt>
+					<img src="{{ asset('assets/images/favicon.png') }}" alt="IMG">
+				</div>
 
-        <form method="POST" action="{{ route('login') }}">
-            @csrf
+				{{-- 🔹 FORMULARIO FUNCIONAL DE LARAVEL --}}
+				<form class="login100-form validate-form" method="POST" action="{{ route('login') }}">
+					@csrf
 
-            <div>
-                <x-label for="email" value="{{ __('Email') }}" />
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-            </div>
+					<span class="login100-form-title">
+						{{ __('Member Login') }}
+					</span>
 
-            <div class="mt-4">
-                <x-label for="password" value="{{ __('Password') }}" />
-                <x-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="current-password" />
-            </div>
+					{{-- 🔸 MENSAJES DE ERROR --}}
+					@if ($errors->any())
+						<div class="alert alert-danger mt-2">
+							<ul class="mb-0">
+								@foreach ($errors->all() as $error)
+									<li>{{ $error }}</li>
+								@endforeach
+							</ul>
+						</div>
+					@endif
 
-            <div class="block mt-4">
-                <label for="remember_me" class="flex items-center">
-                    <x-checkbox id="remember_me" name="remember" />
-                    <span class="ms-2 text-sm text-gray-600 dark:text-gray-400">{{ __('Remember me') }}</span>
-                </label>
-            </div>
+					{{-- 🔸 EMAIL --}}
+					<div class="wrap-input100 validate-input" data-validate="Valid email is required: ex@abc.xyz">
+						<input class="input100" type="email" name="email" value="{{ old('email') }}" placeholder="Correo Electronico" required autofocus>
+						<span class="focus-input100"></span>
+						<span class="symbol-input100">
+							<i class="fa fa-envelope" aria-hidden="true"></i>
+						</span>
+					</div>
 
-            <div class="flex items-center justify-end mt-4">
-                @if (Route::has('password.request'))
-                    <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('password.request') }}">
-                        {{ __('Forgot your password?') }}
-                    </a>
-                @endif
+					{{-- 🔸 PASSWORD --}}
+					<div class="wrap-input100 validate-input" data-validate="Password is required">
+						<input class="input100" type="password" name="password" placeholder="Contraseña" required>
+						<span class="focus-input100"></span>
+						<span class="symbol-input100">
+							<i class="fa fa-lock" aria-hidden="true"></i>
+						</span>
+					</div>
 
-                <x-button class="ms-4">
-                    {{ __('Log in') }}
-                </x-button>
-            </div>
-        </form>
-    </x-authentication-card>
-</x-guest-layout>
+					{{-- 🔸 RECORDAR --}}
+					<div class="text-start mb-3">
+						<label>
+							<input type="checkbox" name="remember"> {{ __('Remember me') }}
+						</label>
+					</div>
+
+					{{-- 🔸 BOTÓN LOGIN --}}
+					<div class="container-login100-form-btn">
+						<button type="submit" class="login100-form-btn">
+							{{ __('Login') }}
+						</button>
+					</div>
+
+					{{-- 🔸 ENLACES ADICIONALES --}}
+					<div class="text-center p-t-12">
+						@if (Route::has('password.request'))
+							<a class="txt2" href="{{ route('password.request') }}">
+								{{ __('Forgot your password?') }}
+							</a>
+						@endif
+					</div>
+
+					<div class="text-center p-t-136">
+						<a class="txt2" href="{{ route('register') }}">
+							{{ __('Create your Account') }}
+							<i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
+						</a>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<!--===============================================================================================-->	
+	<script src="{{ asset('assets/vendor/jquery/jquery-3.2.1.min.js') }}"></script>
+	<script src="{{ asset('assets/vendor/bootstrap/js/popper.js') }}"></script>
+	<script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.min.js') }}"></script>
+	<script src="{{ asset('assets/vendor/select2/select2.min.js') }}"></script>
+	<script src="{{ asset('assets/vendor/tilt/tilt.jquery.min.js') }}"></script>
+	<script>
+		$('.js-tilt').tilt({
+			scale: 1.1
+		})
+	</script>
+	<script src="{{ asset('assets/js/main.js') }}"></script>
+</body>
+</html>
