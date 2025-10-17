@@ -10,6 +10,7 @@ use App\Models\OrdenCompra;
 use App\Models\Sucursal;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 class OrdenesController extends Controller
 {
 
@@ -71,8 +72,21 @@ public function inicio()
     }
 
 # solicitar informacion de la unidad
+# solicitar informacion de la unidad
 public function guardar(Request $request)
 {
+    // 1. 🔑 OBTENER EL ID DEL USUARIO LOGEADO
+    $userId = Auth::id();
+
+    // Verificación de seguridad
+    if (!$userId) {
+        \Log::error('Intento de guardar orden sin usuario autenticado.');
+        return response()->json([
+            'success' => false,
+            'message' => 'Error de autenticación. Debe iniciar sesión.'
+        ], 401);
+    }
+    
     try {
         // 🔹 Log para depuración
         \Log::info('Datos recibidos en guardar:', $request->all());
@@ -89,7 +103,7 @@ public function guardar(Request $request)
             'productos.*.producto' => 'required|string|max:255',
             'productos.*.cantidad' => 'required|numeric|min:1',
             'productos.*.precio' => 'required|numeric|min:0',
-            'productos.*.id_unidad' => 'required|integer|exists:unidades,id_unidad' // 👈 CORREGIDO
+            'productos.*.id_unidad' => 'required|integer|exists:unidades,id_unidad'
         ]);
 
         \Log::info('Datos validados:', $validated);
@@ -153,6 +167,10 @@ public function guardar(Request $request)
             'totalbs' => $totalBs,
             'proveedores' => $validated['proveedor_id'],
             'fecha_orden' => $validated['fecha'],
+            
+            // 2. 🎯 GUARDAR EL ID DEL USUARIO REGISTRADO
+            'usuario' => $userId, // <-- CAMBIO CLAVE: Guarda el ID del usuario logeado
+            
             'created_at' => now(),
             'updated_at' => now()
         ];
