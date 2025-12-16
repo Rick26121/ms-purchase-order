@@ -25,7 +25,7 @@
 
 <!-- Caja 3 -->
 <div class="col-md-6 col-lg-3">
-  <div class="info-box" style="cursor: pointer;" onclick="window.location.href='/ordenes-diarias';">
+  <div class="info-box" style="cursor: pointer;" onclick="window.location.href='/reporte';">
     <span class="info-box-icon bg-warning"><i class="fas fa-calendar-day"></i></span> 
       <span class="info-box-text">Ordenes Diarias</span>
       <span class="info-box-number">1,410</span>

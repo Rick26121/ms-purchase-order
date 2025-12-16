@@ -2,20 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OrdenesController;
-// use Illuminate\Support\Facades\Http; // Esta línea no es necesaria aquí, se usa dentro del controlador
-
-// ==========================================================
-// RUTA PÚBLICA (SOLO ACCESIBLE SIN INICIAR SESIÓN)
-// Dejamos este espacio para cualquier ruta que DEBA ser pública,
-// pero hemos movido la ruta '/' al grupo protegido.
-// ==========================================================
-// NOTA: La ruta '/' fue movida al grupo protegido más abajo.
-
-
+use App\Http\Controllers\ReportesController;
 // ==========================================================
 // GRUPO DE RUTAS PROTEGIDAS (REQUIEREN INICIO DE SESIÓN)
-// El 'auth:sanctum' es el middleware CLAVE.
-// Si el usuario no tiene una sesión válida, será redirigido a /login.
 // ==========================================================
 Route::middleware([
     'auth:sanctum',
@@ -24,45 +13,142 @@ Route::middleware([
 ])->group(function () {
 
     // --- RUTA RAÍZ AHORA PROTEGIDA ---
-    // Si el usuario no está logueado y es redirigido aquí, el middleware 'auth' lo enviará a /login.
     Route::get('/', function () {
         return view('principal');
-    })->name('principal'); // Le asignamos un nombre si lo necesitas.
+    })->name('principal');
 
     // --- RUTA DEL DASHBOARD DE JETSTREAM ---
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
 
-    // --- TUS RUTAS DE ÓRDENES DE COMPRA Y PROVEEDORES ---
-
-    // Obtener información de un proveedor (ruta nombrada)
-    Route::get('/ordenes/proveedor/{id}', [OrdenesController::class, 'getProveedor'])->name('ordenes.proveedor');
-
-    // Opcional: búsqueda de proveedores
-    Route::get('/ordenes/buscarProveedores', [OrdenesController::class, 'buscarProveedores']);
+    // ==========================================================
+    // RUTAS PARA LA VISTA DE CREAR ORDEN
+    // ==========================================================
     
-    // Proveedores
-    Route::get('/consultar/sucursales', [OrdenesController::class, 'obtenerSucursales']);
-
-    // Crear Orden
+    // Vista para crear orden
     Route::get('/ordenes/crear', [OrdenesController::class, 'inicio'])->name('ordenes.crear');
     
-    // Guardar Orden (POST)
-    Route::post('/ordenes/guardar', [OrdenesController::class, 'guardar'])->name('ordenes.guardar');
-    
-    // Listado menu
+    // Menú de órdenes
     Route::get('/ordenes/menu', [OrdenesController::class, 'menu'])->name('ordenes.menu');
     
-    // Listado ordenes
-    Route::get('/ordenes-compras/{id}', [OrdenesController::class, 'show'])->name('ordenes-compras.mostrarid');
+    // Vista para crear nueva orden (alternativa)
+    Route::get('/ordenes/crear-vista', [OrdenesController::class, 'crear'])->name('ordenes.crear-vista');
 
-    Route::get('/ordenes-compras/filtrar/buscar', [OrdenesController::class, 'filtrar'])->name('ordenes-compras.filtro');
+    // ==========================================================
+    // RUTAS PARA DATOS (AJAX/API)
+    // ==========================================================
     
-    // Listado de datos de órdenes
-    Route::get('/ordenes-listado', [OrdenesController::class, 'index'])->name('ordenes-compras.datos');
+    // Obtener información de un proveedor
+    Route::get('/ordenes/proveedor/{id}', [OrdenesController::class, 'getProveedor'])->name('ordenes.proveedor');
 
-    // Cambiar estatus de la orden (POST)
-    Route::post('/ordenes/cambiar-estatus', [OrdenesController::class, 'cambiarEstatus'])
-        ->name('ordenes-compras.cambiar-estatus');
+    // Búsqueda de proveedores
+    Route::get('/ordenes/buscarProveedores', [OrdenesController::class, 'buscarProveedores']);
+    
+    // Búsqueda de sucursales
+    Route::get('/ordenes/buscarSucursales', [OrdenesController::class, 'buscarSucursales']);
+    
+    // Obtener todas las sucursales
+    Route::get('/consultar/sucursales', [OrdenesController::class, 'obtenerSucursales']);
+
+    // ==========================================================
+    // RUTAS PARA GUARDAR ÓRDENES (POST)
+    // ==========================================================
+    
+    // Guardar Orden Completa (método tradicional)
+    Route::post('/ordenes/guardar', [OrdenesController::class, 'guardar'])->name('ordenes.guardar');
+    
+    // Guardar Orden Completa (alternativa - usando el nuevo método)
+    Route::post('/guardar-orden-completa', [OrdenesController::class, 'guardarOrdenCompleta'])->name('ordenes.guardar-completa');
+    
+    // Crear Orden Vacía (solo cabecera)
+    Route::post('/crear-orden', [OrdenesController::class, 'crearOrden'])->name('ordenes.crear-vacia');
+    
+    // Agregar producto a orden existente
+    Route::post('/agregar-producto-orden', [OrdenesController::class, 'agregarProductoOrden'])->name('ordenes.agregar-producto');
+    
+    // Actualizar producto de orden (NUEVA)
+    Route::put('/actualizar-producto-orden', [OrdenesController::class, 'actualizarProductoOrden'])->name('ordenes.actualizar-producto');
+    
+    // Eliminar producto de orden
+    Route::delete('/eliminar-producto-orden', [OrdenesController::class, 'eliminarProductoOrden'])->name('ordenes.eliminar-producto');
+    
+    // Cambiar estatus de la orden
+    Route::post('/ordenes/cambiar-estatus', [OrdenesController::class, 'cambiarEstatus'])->name('ordenes.cambiar-estatus');
+
+    // ==========================================================
+    // RUTAS PARA CONSULTAR ÓRDENES (GET)
+    // ==========================================================
+    
+    // Obtener detalles de una orden (JSON) - PARA EL MODAL
+    Route::get('/ordenes/detalles/{id}', [OrdenesController::class, 'obtenerDetallesOrden'])
+        ->where('id', '[0-9]+')
+        ->name('ordenes.detalles');
+    
+    // Listado de todas las órdenes (JSON) - PARA LA TABLA PRINCIPAL
+    Route::get('/ordenes-listado', [OrdenesController::class, 'index'])
+        ->name('ordenes-compras.datos');
+    
+    // Buscar orden por parámetros (usando query string)
+    Route::get('/ordenes/buscar-orden', [OrdenesController::class, 'buscarOrden'])
+        ->name('ordenes.buscar-orden');
+    
+    // Filtrar órdenes
+    Route::get('/ordenes-compras/filtrar/buscar', [OrdenesController::class, 'filtrar'])
+        ->name('ordenes-compras.filtro');
+    
+    // Vista HTML de orden (PLANTILLA PARA IMPRIMIR)
+    Route::get('/orden-compras/plantilla/{id}', [OrdenesController::class, 'obtenerOrdenPorId'])
+        ->where('id', '[0-9]+')
+        ->name('ordenes.plantilla');
+    
+    // ==========================================================
+    // RUTAS PARA EDITAR/ELIMINAR
+    // ==========================================================
+    
+    // Editar orden (redirección a formulario de edición)
+    Route::get('/ordenes-compras/{id}/editar', function($id) {
+        return redirect()->route('ordenes.crear')->with('editar_orden', $id);
+    })->name('ordenes.editar');
+    
+    // Eliminar (ocultar) una orden
+    Route::delete('/ordenes-compras/{id}', [OrdenesController::class, 'destroy'])
+        ->where('id', '[0-9]+')
+        ->name('ordenes.eliminar');
+
+    // ==========================================================
+    // RUTAS OBSOLETAS/DUPLICADAS QUE DEBES ELIMINAR
+    // ==========================================================
+    // Elimina estas rutas porque están duplicadas o no existen:
+    // - '/ordenes/consulta/{id}' (duplicado)
+    // - '/ordenes-compras/{id}' (no existe método show)
+    // - '/orden/{id}' (duplicado)
+    // - '/orden/{id}/detalles' (ya tenemos '/ordenes/detalles/{id}')
+
+    
+
+
+//responsable 
+route::get('/responsable', [OrdenesController::class, 'obtenerResponsables'])->name('ordenes.responsable');
+//tipofactura
+route::get('/tipofactura', [OrdenesController::class, 'obtenertipof'])->name('ordenes.tipofactura');
+
+route::post('/gestion-ordenes', [OrdenesController::class, 'gestion_ordenes'])->name('ordenes.gestion');
+Route::get('/obtener-ordenes/{id}', [OrdenesController::class, 'updateconsulta'])->name('ordenes.obtenerupdate');
+
+route::get('/reporte', [ReportesController::class, 'generarReporte'])->name('reportes.generar');
+
+
+
+// actulizacion automaticas 
+// En routes/api.php para API
+Route::get('/actualizar-ordenes', [OrdenesController::class, 'actualizarOrdenesConTasaActual']);
+
+// O si quieres poder enviar una tasa personalizada
+Route::post('/actualizar-ordenes', [OrdenesController::class, 'actualizarOrdenesConTasaPersonalizada']);
+
+// En routes/web.php para web
+Route::get('/actualizar-ordenes', [OrdenesController::class, 'actualizarOrdenesConTasaActual']);
+
+
 });

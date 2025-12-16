@@ -9,7 +9,7 @@ class Proveedor extends Model
 {
     use HasFactory;
 
-    protected $table = 'proveedores'; // Nombre exacto de tu tabla
+    protected $table = 'proveedores';
     protected $primaryKey = 'id_proveedor';
     public $timestamps = false;
 
@@ -21,10 +21,9 @@ class Proveedor extends Model
         'direccion',
     ];
 
-
-
-
-   
-
-
+    // Relación con la tabla bancos (uno a uno)
+    public function bancos()
+    {
+        return $this->hasOne(Bancos::class, 'id_proveedor', 'id_proveedor');
+    }
 }
