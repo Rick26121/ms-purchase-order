@@ -1,0 +1,118 @@
+# Control de versiones
+.git/
+.gitignore
+.gitattributes
+.svn/
+.hg/
+
+# Entornos y configuración
+.env
+.env.*
+.env.*.local
+.env.local
+.env.backup
+.env.production
+.docker.env
+docker-compose.override.yml
+docker-compose.*.yml
+
+# Dependencias (se instalarán dentro del contenedor)
+vendor/
+node_modules/
+
+# Cache y logs
+storage/*.key
+storage/*.json
+storage/framework/
+storage/logs/
+bootstrap/cache/
+*.log
+npm-debug.log
+yarn-error.log
+
+# Assets (se compilarán en el contenedor)
+public/css/
+public/js/
+public/mix-manifest.json
+public/hot/
+public/hot
+public/build/
+public/assets/
+
+# Tests y documentación
+tests/
+docs/
+*.md
+README.md
+CHANGELOG.md
+CONTRIBUTING.md
+
+# IDE y editor archivos
+.idea/
+.vscode/
+*.sublime-*
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Herramientas de CI/CD
+.github/
+.gitlab/
+.woodpecker/
+.travis.yml
+circle.yml
+.gitlab-ci.yml
+
+# Archivos temporales
+*.tmp
+*.bak
+*.old
+*.orig
+*.zip
+*.tar.gz
+*.rar
+
+# Archivos de Docker no necesarios
+Dockerfile
+.dockerignore
+docker-compose.yml
+.docker/
+
+# SSH y certificados
+.ssh/
+*.pem
+*.key
+*.crt
+
+# Bases de datos SQLite
+*.sqlite
+*.sqlite3
+
+# PHPUnit
+.phpunit.cache
+.phpunit.result.cache
+phpunit.xml
+
+# Configuraciones locales
+php.ini
+*.local
+
+# Informes de cobertura
+coverage/
+coverage.xml
+.coveralls.yml
+
+# Nginx config (se copia aparte)
+docker/nginx/*.conf
+nginx.conf
+
+# Scripts de despliegue
+deploy.sh
+deploy.yml
+*.deploy
+
+# Archivos comprimidos de backup
+*.sql.gz
+*.sql

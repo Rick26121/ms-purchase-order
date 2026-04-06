@@ -9,32 +9,7 @@
 @section('content')
     
 <!-- Filtro de período -->
-<div class="row mb-3">
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="periodo">Periodo de Reporte:</label>
-                            <select class="form-control" id="periodo">
-                                <option value="diario">Reportes Diarios</option>
-                                <option value="mensual">Reportes Mensuales</option>
-                                <option value="todos">Todos los Reportes</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="fecha">Fecha:</label>
-                            <input type="date" class="form-control" id="fecha" value="{{ date('Y-m-d') }}">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+
 
 <div class="row">
     <!-- REPORTES DIARIOS -->
@@ -49,16 +24,16 @@
                 <div class="row">
                     <!-- Caja 1: Órdenes de Compras -->
                     <div class="col-md-6 col-lg-3 mb-3">
-                        <a href="/ordenes/menu" style="text-decoration: none; color: inherit;">
+                        <a href="/reportes/ordenes-hoy" style="text-decoration: none; color: inherit;">
                             <div class="info-box bg-gradient-info">
                                 <span class="info-box-icon">
                                     <i class="fas fa-file-invoice-dollar"></i>
                                 </span>
                                 <div class="info-box-content">
-                                    <span class="info-box-text">Órdenes de Compras</span>
+                                    <span class="info-box-text">Órdenes de Compras Diarias</span>
                                     <span class="info-box-number">{{ number_format($totalOrdenes) }}</span>
                                     <div class="progress">
-                                        <div class="progress-bar" style="width: 70%"></div>
+                                        <div class="progress-bar" style="width: 100%"></div>
                                     </div>
                                     <span class="progress-description">
                                         <i class="fas fa-clock"></i> Hoy: {{ number_format($ordenesHoy) }} nuevas
@@ -69,22 +44,32 @@
                     </div>
 
                     <!-- Caja 2: Proveedores -->
-                    <div class="col-md-6 col-lg-3 mb-3">
-                        <div class="info-box bg-gradient-success" style="cursor: pointer;" onclick="window.location.href='/proveedores';">
-                            <span class="info-box-icon">
-                                <i class="fas fa-truck-loading"></i>
-                            </span>
-                            <div class="info-box-content">
-                                <span class="info-box-text">Proveedores Activos</span>
-                                <span class="info-box-number">410</span>
-                                <div class="progress">
-                                    <div class="progress-bar" style="width: 85%"></div>
-                                </div>
-                                <span class="progress-description">
-                                    <i class="fas fa-clock"></i> Hoy: 3 nuevos
+                   <!-- Caja 4: Compras del Mes -->
+                   <div class="col-md-6 col-lg-3 mb-3">
+                        <a href="reportes/buscar-fechas" class="text-decoration-none text-white">
+                            <div class="info-box bg-gradient-teal">
+                                <span class="info-box-icon">
+                                    <i class="fas fa-calendar-alt"></i>
                                 </span>
+
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Resumen por Fechas</span>
+
+                                    <span class="info-box-number">
+                                        Reporte
+                                    </span>
+
+                                    <div class="progress">
+                                        <div class="progress-bar" style="width: 100%"></div>
+                                    </div>
+
+                                    <span class="progress-description">
+                                        <i class="fas fa-search mr-1"></i>
+                                        Seleccionar rango de fechas
+                                    </span>
+                                </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -99,51 +84,7 @@
                     <i class="fas fa-calendar-alt"></i> Reportes Mensuales
                 </h3>
             </div>
-            <div class="card-body">
-                <div class="row">
-                    <!-- Caja 3: Reporte Financiero Mensual -->
-                    <div class="col-md-6 col-lg-3 mb-3">
-                        <a href="/reportes/financiero-mensual" style="text-decoration: none; color: inherit;">
-                            <div class="info-box bg-gradient-indigo">
-                                <span class="info-box-icon">
-                                    <i class="fas fa-money-bill-wave"></i>
-                                </span>
-                                <div class="info-box-content">
-                                    <span class="info-box-text">Financiero Mensual</span>
-                                    <span class="info-box-number">$450,120</span>
-                                    <div class="progress">
-                                        <div class="progress-bar" style="width: 80%"></div>
-                                    </div>
-                                    <span class="progress-description">
-                                        <i class="fas fa-calendar"></i> Mes actual
-                                    </span>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-
-                    <!-- Caja 4: Compras del Mes -->
-                    <div class="col-md-6 col-lg-3 mb-3">
-                        <a href="/reportes/compras-mensuales" style="text-decoration: none; color: inherit;">
-                            <div class="info-box bg-gradient-teal">
-                                <span class="info-box-icon">
-                                    <i class="fas fa-shopping-cart"></i>
-                                </span>
-                                <div class="info-box-content">
-                                    <span class="info-box-text">Compras del Mes</span>
-                                    <span class="info-box-number">$125,800</span>
-                                    <div class="progress">
-                                        <div class="progress-bar" style="width: 65%"></div>
-                                    </div>
-                                    <span class="progress-description">
-                                        <i class="fas fa-calendar"></i> -5% vs mes anterior
-                                    </span>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
+            
         </div>
     </div>
 </div>
@@ -156,7 +97,7 @@
                 <h3 class="card-title">
                     <i class="fas fa-chart-bar"></i> Gráficas de Reportes
                 </h3>
-            </div>
+            </div>                   
             <div class="card-body">
                 <p class="text-muted mb-3">Visualización de datos estadísticos de todos los reportes.</p>
                 <div class="row">

@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OrdenesController;
 use App\Http\Controllers\ReportesController;
+use App\Http\Controllers\InicioController;
+use App\Http\Controllers\ProveedorController;
 // ==========================================================
 // GRUPO DE RUTAS PROTEGIDAS (REQUIEREN INICIO DE SESIÓN)
 // ==========================================================
@@ -13,9 +15,10 @@ Route::middleware([
 ])->group(function () {
 
     // --- RUTA RAÍZ AHORA PROTEGIDA ---
-    Route::get('/', function () {
+    /*Route::get('/', function () {
         return view('principal');
-    })->name('principal');
+    })->name('principal');*/
+    Route::get('/', [InicioController::class, 'inicio'])->name('principal');
 
     // --- RUTA DEL DASHBOARD DE JETSTREAM ---
     Route::get('/dashboard', function () {
@@ -126,7 +129,8 @@ Route::middleware([
     // - '/orden/{id}/detalles' (ya tenemos '/ordenes/detalles/{id}')
 
     
-
+// Agrega esta ruta específica para el modal
+Route::delete('/eliminar-producto-modal', [OrdenesController::class, 'eliminarProductoModal']); 
 
 //responsable 
 route::get('/responsable', [OrdenesController::class, 'obtenerResponsables'])->name('ordenes.responsable');
@@ -137,18 +141,36 @@ route::post('/gestion-ordenes', [OrdenesController::class, 'gestion_ordenes'])->
 Route::get('/obtener-ordenes/{id}', [OrdenesController::class, 'updateconsulta'])->name('ordenes.obtenerupdate');
 
 route::get('/reporte', [ReportesController::class, 'generarReporte'])->name('reportes.generar');
-
+route::post('ordenes/actualizar-producto/', [OrdenesController::class, 'actualizarProducto'])->name('actualizar.producto');
 
 
 // actulizacion automaticas 
 // En routes/api.php para API
-Route::get('/actualizar-ordenes', [OrdenesController::class, 'actualizarOrdenesConTasaActual']);
+//Route::get('/actualizar-ordenes', [OrdenesController::class, 'actualizarOrdenesConTasaActual']);
 
 // O si quieres poder enviar una tasa personalizada
-Route::post('/actualizar-ordenes', [OrdenesController::class, 'actualizarOrdenesConTasaPersonalizada']);
+//Route::post('/actualizar-ordenes', [OrdenesController::class, 'actualizarOrdenesConTasaPersonalizada']);
 
 // En routes/web.php para web
-Route::get('/actualizar-ordenes', [OrdenesController::class, 'actualizarOrdenesConTasaActual']);
+Route::get('/actualizar-ordenes', [OrdenesController::class, 'actualizarOrdenesConTasaActual'])->name('actualizar.tasas');
 
+// Reportes de órdenes
+Route::prefix('reportes')->group(function () {
+    Route::get('/menu', [ReportesController::class, 'generarReporte'])->name('reportes.menu');
+    Route::get('/ordenes-hoy', [ReportesController::class, 'ordenesHoy'])->name('ordenes.hoy');
+    Route::get('/buscar-fechas', [ReportesController::class, 'ordenesPorFechaForm'])->name('ordenes.fechas.form');
+    Route::post('/buscar-fechas', [ReportesController::class, 'ordenesPorFecha'])->name('ordenes.fechas');
+});
+    Route::prefix('proveedor')->group(function () {
+    Route::get('/', [ProveedorController::class, 'listarProve'])->name('proveedor.listar');
+    Route::get('/obtener/{id}', [ProveedorController::class, 'obtenerProveedor'])->name('proveedor.obtener');
+    Route::get('/ver/{id}', [ProveedorController::class, 'verProveedor'])->name('proveedor.ver');
+    Route::post('/guardar', [ProveedorController::class, 'guardarProve'])->name('proveedor.guardar');
+    Route::put('/actualizar/{id}', [ProveedorController::class, 'actualizarProve'])->name('proveedor.actualizar');
+        });
+
+
+    Route::post('/reportes/exportar-excel', [ReportesController::class, 'exportarExcel'])
+    ->name('reportes.exportar.excel');
 
 });

@@ -1,24 +1,180 @@
-*.log
-.DS_Store
+# Dependencias de PHP
+/vendor/
+composer.lock
+composer.phar
+
+# Dependencias de Node.js
+/node_modules/
+npm-debug.log
+npm-error.log
+package-lock.json
+yarn.lock
+yarn-error.log
+
+# Archivos de entorno
 .env
 .env.backup
 .env.production
-.phpactor.json
-.phpunit.result.cache
-/.fleet
-/.idea
-/.nova
-/.phpunit.cache
-/.vscode
-/.zed
-/auth.json
-/node_modules
-/public/build
-/public/hot
-/public/storage
+.env.local
+.env.*.local
+
+# Cache y logs de Laravel
 /storage/*.key
-/storage/pail
-/vendor
-Homestead.json
-Homestead.yaml
+/storage/*.json
+/storage/framework/
+/storage/logs/
+/storage/app/public/
+/storage/debugbar/
+
+bootstrap/cache/
+storage/debugbar/
+storage/framework/cache/
+storage/framework/sessions/
+storage/framework/testing/
+storage/framework/views/
+
+# Logs
+*.log
+storage/logs/*.log
+
+# Reportes de errores
+error_log
+error.log
+
+# Sesiones
+sessions/
+
+# Archivos de IDE
+/.idea/
+/.vscode/
+*.sublime-*
+*.swp
+*.swo
+*~
+.DS_Store
+.vscode/
+
+# Archivos de sistema
 Thumbs.db
+desktop.ini
+.directory
+.elevate
+
+# Archivos de backup
+*.bak
+*.old
+*.orig
+*.tmp
+
+# Tests y cobertura
+/.phpunit.cache
+/.phpunit.result.cache
+/coverage
+/coverage.xml
+/.coveralls.yml
+phpunit.xml
+.phpunit.result.cache
+*.coverage
+*.test
+
+# Herramientas de calidad de código
+/.php-cs-fixer.cache
+/.phpcs-cache
+/phpcs.xml
+/psalm.xml
+/phpstan.neon
+.sass-cache/
+
+# Archivos comprimidos
+*.zip
+*.tar.gz
+*.rar
+*.7z
+
+# Assets compilados
+/public/css/
+/public/js/
+/public/mix-manifest.json
+/public/hot
+/public/hot/
+/public/storage/
+/public/build/
+/public/assets/
+/mix-manifest.json
+
+# Laravel Sail
+/docker-compose.override.yml
+/docker/8.0/
+/docker/8.1/
+/docker/8.2/
+/docker/8.3/
+/docker/phpunit/
+/docker/mysql/
+/docker/nginx/
+/docker/pgsql/
+/docker/redis/
+/docker/mariadb/
+/docker/memcached/
+/docker/meilisearch/
+/docker/typesense/
+/docker/elasticsearch/
+/docker/phpmyadmin/
+
+# Jetstream y Livewire
+/livewire-temp/
+/public/livewire/
+/livewire/
+
+# AdminLTE
+/public/vendor/adminlte/
+/public/vendor/fontawesome/
+/public/vendor/overlayScrollbars/
+/public/vendor/popper/
+/public/vendor/bootstrap/
+/public/vendor/icheck-bootstrap/
+/public/vendor/jquery/
+
+# PDFs generados (dompdf)
+/storage/framework/dompdf/
+/public/pdf/
+/storage/app/public/pdf/
+
+# Excel/CSV generados (phpspreadsheet)
+/storage/excel/
+/public/exports/
+
+# Redis
+dump.rdb
+
+# Variables de entorno específicas de Docker
+.env.docker
+.env.docker.*
+.docker.env
+
+# Archivos de despliegue
+.DS_Store
+.idea/
+.vscode/
+.svn/
+.gitattributes
+.gitmodules
+
+# Certificados SSL
+*.crt
+*.key
+*.pem
+*.p12
+
+# Archivos de sesión de PHP
+sess_*
+
+# Archivos temporales de composer
+composer.lock
+
+# Paquetes descargados
+/downloads/
+/packages/
+
+# Documentación temporal
+/docs/_build/
+/docs/api/

@@ -1,0 +1,9 @@
+{
+  "fecha": "2026-01-26 15:34:32",
+  "tasa_cambio": 355.5528,
+  "aplica_iva": false,
+  "aplica_deduccion": false,
+  "productos": [
+    {
+      "producto": "pego",
+      "cantidad": 
