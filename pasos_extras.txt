@@ -1,0 +1,44 @@
+Paso 1: Entrar al contenedor PHP
+bash
+docker exec -it misuper_php bash
+Paso 2: Una vez dentro del contenedor (verás que el prompt cambia), ejecuta:
+bash
+composer install --ignore-platform-reqs
+Paso 4: Salir del contenedor
+bash
+exit
+Paso 5: Verificar que vendor/ existe
+bash
+docker exec misuper_php ls -la vendor/ | findstr "laravel"
+
+¡Las dependencias ya se instalaron correctamente! Pero el error 500 persiste. Ahora necesitamos configurar Laravel.
+
+Ejecuta estos comandos dentro del contenedor:
+Paso 1: Entrar al contenedor
+bash
+docker exec -it misuper_php bash
+Paso 2: Configurar Laravel (dentro del contenedor)
+bash
+# Crear archivo .env
+cp .env.example .env
+
+# Generar key de la aplicación
+php artisan key:generate
+
+# Limpiar caché
+php artisan config:clear
+php artisan cache:clear
+php artisan view:clear
+
+# Dar permisos
+chmod -R 777 storage bootstrap/cache
+
+# Verificar que funciona
+php artisan route:list
+
+Paso 3: Salir del contenedor
+bash
+exit
+Paso 4: Reiniciar los contenedores
+bash
+docker-compose restart

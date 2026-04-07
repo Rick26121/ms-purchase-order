@@ -1,27 +1,24 @@
 version: '3.8'
 
 services:
-  app:
-    build: .
-    image: misuper-app:latest
-    container_name: misuper_app
-    restart: unless-stopped
+  nginx:
+    image: nginx:alpine
+    container_name: misuper_nginx
+    ports:
+      - "8080:80"
     volumes:
-      - ./storage:/var/www/html/storage
+      - ./:/var/www/html
+      - ./default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - php
     networks:
       - misuper
 
-  webserver:
-    image: nginx:alpine
-    container_name: misuper_nginx
-    restart: unless-stopped
-    ports:
-      - "80:80"
+  php:
+    build: .
+    container_name: misuper_php
     volumes:
       - ./:/var/www/html
-      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
-    depends_on:
-      - app
     networks:
       - misuper
 
