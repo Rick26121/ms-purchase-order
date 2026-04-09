@@ -26,5 +26,12 @@ jobs:
     
     - name: Build and push Docker image
       run: |
-        echo "iniciando loging"
-        docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+        TIMESTAMP=$(date +%s)
+        IMAGE_NAME=my-image-name:$TIMESTAMP
+        echo "Construyendo imagen..."
+        docker build . --file Dockerfile --tag $IMAGE_NAME
+        docker tag $IMAGE_NAME my-image-name:latest
+        echo "Pusheando imagen..."
+        docker push $IMAGE_NAME
+        docker push my-image-name:latest
+        echo "¡Imagen pusheada exitosamente!"
