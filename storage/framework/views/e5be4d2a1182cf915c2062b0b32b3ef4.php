@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ config('app.tipo_documento') }} #{{ $calculos['numeroOrden'] }}</title>
+    <title><?php echo e(config('app.tipo_documento')); ?> #<?php echo e($calculos['numeroOrden']); ?></title>
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
@@ -473,16 +473,16 @@
             <div class="header-logo">
                 <div class="logo-container">
                     <div class="logo-placeholder">
-                        <img src="{{ asset('assets/images/Logo.png') }}" alt="Logo">
+                        <img src="<?php echo e(asset('assets/images/logo.png')); ?>" alt="Logo">
                     </div>
                 </div>
                 <div class="header-info">
-                    <h1>{{ config('app.tipo_documento') }}</h1>
-                    <h2>{{ $orden->sucursal->nombre ?? 'Sucursal' }}</h2>
+                    <h1><?php echo e(config('app.tipo_documento')); ?></h1>
+                    <h2><?php echo e($orden->sucursal->nombre ?? 'Sucursal'); ?></h2>
                 </div>
             </div>
             <div>
-               @php
+               <?php
                     // Función para formatear el número de control en PHP
                     function formatoNumeroControl($numero) {
                         // Obtener el prefijo desde la variable de entorno
@@ -530,14 +530,15 @@
                         $tipoIVA = 'iva-deduccion';
                         $tipoIVATexto = 'IVA con Deducción (75%)';
                     }
-                @endphp
+                ?>
                 
                 <div style="display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; margin-top: 5px;">
-                    <span class="nro-control-formateado">{{ $nroControlFormateado }}</span>
-                    <span class="badge-status badge-{{ strtolower($estatus) }}">{{ $estatusTexto }}</span>
-                    <span class="badge-status badge-{{ $tipoIVA }}">{{ $tipoIVATexto }}</span>
+                    <span class="nro-control-formateado"><?php echo e($nroControlFormateado); ?></span>
+                    <span class="badge-status badge-<?php echo e(strtolower($estatus)); ?>"><?php echo e($estatusTexto); ?></span>
+                    <span class="badge-status badge-<?php echo e($tipoIVA); ?>"><?php echo e($tipoIVATexto); ?></span>
                     <span style="background: #f8f9fa; color: #333; padding: 2px 6px; border-radius: 3px; font-size: 10px;">
-                        <i class="fas fa-calendar-alt me-1"></i>{{ $calculos['fechaEmision'] }}
+                        <i class="fas fa-calendar-alt me-1"></i><?php echo e($calculos['fechaEmision']); ?>
+
                     </span>
                 </div>
             </div>
@@ -551,7 +552,7 @@
             <button class="btn btn-custom btn-print" onclick="window.print()">
                 <i class="fas fa-print"></i> Imprimir
             </button>
-            <a href="{{ route('ordenes.menu') }}" class="btn btn-custom btn-back">
+            <a href="<?php echo e(route('ordenes.menu')); ?>" class="btn btn-custom btn-back">
                 <i class="fas fa-arrow-left"></i> Volver
             </a>
         </div>
@@ -565,43 +566,45 @@
                         <h4><i class="fas fa-truck me-2"></i> Proveedor</h4>
                         <div class="info-row">
                             <div class="info-label"><i class="fas fa-building"></i> Empresa:</div>
-                            <div class="info-value">{{ $orden->proveedor->nombre ?? 'Proveedor' }}</div>
+                            <div class="info-value"><?php echo e($orden->proveedor->nombre ?? 'Proveedor'); ?></div>
                         </div>
                         <div class="info-row">
                             <div class="info-label"><i class="fas fa-id-card"></i> R.I.F.:</div>
-                            <div class="info-value">{{ $orden->proveedor->rif ?? 'RIF' }}</div>
+                            <div class="info-value"><?php echo e($orden->proveedor->rif ?? 'RIF'); ?></div>
                         </div>
                         <div class="info-row">
                             <div class="info-label"><i class="fas fa-map-marker-alt"></i> Dirección:</div>
-                            <div class="info-value">{{ $orden->proveedor->direccion ?? 'Dirección no especificada' }}</div>
+                            <div class="info-value"><?php echo e($orden->proveedor->direccion ?? 'Dirección no especificada'); ?></div>
                         </div>
                         <div class="info-row">
                             <div class="info-label"><i class="fas fa-phone"></i> Teléfono:</div>
                             <div class="info-value">
-                                @php $telefono = $orden->proveedor->telefono ?? null; @endphp
-                                @if(!empty($telefono) && strtolower($telefono) != 'nan' && $telefono != 'null')
-                                    {{ $telefono }}
-                                @else
+                                <?php $telefono = $orden->proveedor->telefono ?? null; ?>
+                                <?php if(!empty($telefono) && strtolower($telefono) != 'nan' && $telefono != 'null'): ?>
+                                    <?php echo e($telefono); ?>
+
+                                <?php else: ?>
                                     <span class="empty-value">No especificado</span>
-                                @endif
+                                <?php endif; ?>
                             </div>
                         </div>
                         <div class="info-row">
                             <div class="info-label"><i class="fas fa-envelope"></i> Correo:</div>
                             <div class="info-value">
-                                @php $correo = $orden->proveedor->correo ?? null; @endphp
-                                @if(!empty($correo) && strtolower($correo) != 'nan' && $correo != 'null')
-                                    {{ $correo }}
-                                @else
+                                <?php $correo = $orden->proveedor->correo ?? null; ?>
+                                <?php if(!empty($correo) && strtolower($correo) != 'nan' && $correo != 'null'): ?>
+                                    <?php echo e($correo); ?>
+
+                                <?php else: ?>
                                     <span class="empty-value">No especificado</span>
-                                @endif
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
                     
                     <!-- Información de pago si existe - VERSIÓN CORREGIDA -->
-                    @if(isset($orden->bancos_info))
-                        @php
+                    <?php if(isset($orden->bancos_info)): ?>
+                        <?php
                             $hayDatosBancos = false;
                             $datosBancos = [];
                             
@@ -616,26 +619,26 @@
                                     }
                                 }
                             }
-                        @endphp
+                        ?>
                         
-                        @if($hayDatosBancos)
+                        <?php if($hayDatosBancos): ?>
                         <div class="info-card" style="border-left-color: #4169E1;">
                             <h4><i class="fas fa-university me-2"></i> Información de Pago</h4>
                             
                             <!-- Pago Móvil -->
-                            @if(isset($datosBancos['pago_movil']))
+                            <?php if(isset($datosBancos['pago_movil'])): ?>
                             <div class="info-row">
                                 <div class="info-label"><i class="fas fa-mobile-alt"></i> Pago Móvil:</div>
-                                <div class="info-value" style="font-size: 10px;">{{ $datosBancos['pago_movil'] }}</div>
+                                <div class="info-value" style="font-size: 10px;"><?php echo e($datosBancos['pago_movil']); ?></div>
                             </div>
-                            @endif
+                            <?php endif; ?>
                             
                             <!-- Banco 1 -->
-                            @if(isset($datosBancos['banco_1']))
+                            <?php if(isset($datosBancos['banco_1'])): ?>
                             <div class="info-row">
                                 <div class="info-label"><i class="fas fa-university"></i> Banco 1:</div>
                                 <div class="info-value" style="font-size: 10px;">
-                                    @php
+                                    <?php
                                         $banco1 = trim($datosBancos['banco_1']);
                                         // Verificar si tiene pipes o formato especial
                                         if(strpos($banco1, '|') !== false) {
@@ -649,17 +652,17 @@
                                         } else {
                                             echo nl2br(e($banco1));
                                         }
-                                    @endphp
+                                    ?>
                                 </div>
                             </div>
-                            @endif
+                            <?php endif; ?>
                             
                             <!-- Banco 2 -->
-                            @if(isset($datosBancos['banco_2']))
+                            <?php if(isset($datosBancos['banco_2'])): ?>
                             <div class="info-row">
                                 <div class="info-label"><i class="fas fa-university"></i> Banco 2:</div>
                                 <div class="info-value" style="font-size: 10px;">
-                                    @php
+                                    <?php
                                         $banco2 = trim($datosBancos['banco_2']);
                                         // Verificar si tiene pipes o formato especial
                                         if(strpos($banco2, '|') !== false) {
@@ -673,21 +676,21 @@
                                         } else {
                                             echo nl2br(e($banco2));
                                         }
-                                    @endphp
+                                    ?>
                                 </div>
                             </div>
-                            @endif
+                            <?php endif; ?>
                             
                             <!-- Titular -->
-                            @if(isset($datosBancos['titular']))
+                            <?php if(isset($datosBancos['titular'])): ?>
                             <div class="info-row">
                                 <div class="info-label"><i class="fas fa-user"></i> Titular:</div>
-                                <div class="info-value">{{ $datosBancos['titular'] }}</div>
+                                <div class="info-value"><?php echo e($datosBancos['titular']); ?></div>
                             </div>
-                            @endif
+                            <?php endif; ?>
                         </div>
-                        @endif
-                    @endif
+                        <?php endif; ?>
+                    <?php endif; ?>
                 </div>
                 
                 <!-- Columna derecha: Información de la sucursal -->
@@ -696,21 +699,22 @@
                         <h4><i class="fas fa-store me-2"></i> Sucursal</h4>
                         <div class="info-row">
                             <div class="info-label"><i class="fas fa-store"></i> Sucursal:</div>
-                            <div class="info-value">{{ $orden->sucursal->nombre ?? 'Sucursal' }}</div>
+                            <div class="info-value"><?php echo e($orden->sucursal->nombre ?? 'Sucursal'); ?></div>
                         </div>
                         <div class="info-row">
                             <div class="info-label"><i class="fas fa-map-marker-alt"></i> Dirección:</div>
-                            <div class="info-value">{{ $orden->sucursal->direccion ?? 'Dirección no especificada' }}</div>
+                            <div class="info-value"><?php echo e($orden->sucursal->direccion ?? 'Dirección no especificada'); ?></div>
                         </div>
                         <div class="info-row">
                             <div class="info-label"><i class="fas fa-phone"></i> Teléfono:</div>
                             <div class="info-value">
-                                @php $telefonoSucursal = $orden->sucursal->telefono ?? null; @endphp
-                                @if(!empty($telefonoSucursal) && strtolower($telefonoSucursal) != 'nan' && $telefonoSucursal != 'null')
-                                    {{ $telefonoSucursal }}
-                                @else
+                                <?php $telefonoSucursal = $orden->sucursal->telefono ?? null; ?>
+                                <?php if(!empty($telefonoSucursal) && strtolower($telefonoSucursal) != 'nan' && $telefonoSucursal != 'null'): ?>
+                                    <?php echo e($telefonoSucursal); ?>
+
+                                <?php else: ?>
                                     <span class="empty-value">No especificado</span>
-                                @endif
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
@@ -720,29 +724,30 @@
                         <h4><i class="fas fa-info-circle me-2"></i> Información de la Orden</h4>
                         <div class="info-row">
                             <div class="info-label"><i class="fas fa-boxes"></i> Productos:</div>
-                            <div class="info-value">{{ count($productos) }} items</div>
+                            <div class="info-value"><?php echo e(count($productos)); ?> items</div>
                         </div>
                         <div class="info-row">
                             <div class="info-label"><i class="fas fa-calendar"></i> Fecha:</div>
-                            <div class="info-value">{{ $calculos['fechaEmision'] }}</div>
+                            <div class="info-value"><?php echo e($calculos['fechaEmision']); ?></div>
                         </div>
                         <div class="info-row">
                             <div class="info-label"><i class="fas fa-hashtag"></i> N° Control:</div>
-                            <div class="info-value"><span class="nro-control-formateado">{{ $nroControlFormateado }}</span></div>
+                            <div class="info-value"><span class="nro-control-formateado"><?php echo e($nroControlFormateado); ?></span></div>
                         </div>
                     </div>
                 </div>
             </div>
             
             <!-- ========== SECCIÓN DE OBSERVACIONES ========== -->
-            @if(!empty($orden->observacion))
+            <?php if(!empty($orden->observacion)): ?>
             <div class="observaciones-card">
                 <h4><i class="fas fa-sticky-note me-2"></i> Observaciones</h4>
                 <div class="observaciones-content">
-                    {{ nl2br(e($orden->observacion)) }}
+                    <?php echo e(nl2br(e($orden->observacion))); ?>
+
                 </div>
             </div>
-            @else
+            <?php else: ?>
             <!-- Si no hay observaciones, puedes mostrar una versión mínima o omitir -->
             <div class="observaciones-card" style="opacity: 0.7; padding: 6px 10px;">
                 <div style="display: flex; align-items: center; justify-content: space-between;">
@@ -752,12 +757,12 @@
                     <span class="empty-value" style="font-size: 10px;">Sin observaciones registradas</span>
                 </div>
             </div>
-            @endif
+            <?php endif; ?>
             
             <!-- Tabla de productos COMPACTA -->
-            @if(count($productos) > 0)
+            <?php if(count($productos) > 0): ?>
             <div class="table-container">
-                <h4><i class="fas fa-shopping-cart me-2"></i> Productos ({{ count($productos) }})</h4>
+                <h4><i class="fas fa-shopping-cart me-2"></i> Productos (<?php echo e(count($productos)); ?>)</h4>
                 <div class="table-responsive">
                     <table class="table table-custom">
                         <thead>
@@ -772,44 +777,48 @@
                         </thead>
                  
                         <tbody id="productos-tbody">
-                            @foreach($productos as $index => $producto)
+                            <?php $__currentLoopData = $productos; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $producto): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <tr>
-                                <td class="text-center">{{ $index + 1 }}</td>
+                                <td class="text-center"><?php echo e($index + 1); ?></td>
                                 <td class="text-center">
                                     <span style="background: #8a0a27; color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px;">
-                                       {{ number_format($producto->cantidad, 2, ',', '.') }}
+                                       <?php echo e(number_format($producto->cantidad, 2, ',', '.')); ?>
+
                                     </span>
                                 </td>
                                 <td class="text-center">
                                     <span style="background: #1E90FF; color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px;">
-                                        {{ $producto->unidad_abreviatura ?? 'UND' }}
+                                        <?php echo e($producto->unidad_abreviatura ?? 'UND'); ?>
+
                                     </span>
                                 </td>
                                 <td>
                                     <div style="font-size: 10px; line-height: 1.3;">
-                                        <strong>{{ $producto->producto_nombre ?? 'Producto' }}</strong>
-                                        @if($producto->producto_id ?? false)
-                                            <br><span style="color: #6c757d; font-size: 9px;">ID: {{ $producto->producto_id }}</span>
-                                        @endif
+                                        <strong><?php echo e($producto->producto_nombre ?? 'Producto'); ?></strong>
+                                        <?php if($producto->producto_id ?? false): ?>
+                                            <br><span style="color: #6c757d; font-size: 9px;">ID: <?php echo e($producto->producto_id); ?></span>
+                                        <?php endif; ?>
                                     </div>
                                 </td>
                                 <td class="text-end">
-                                    <span class="precio-unitario" data-precio="{{ $producto->precio }}">
-                                        $ {{ number_format($producto->precio, 4, ',', '.') }}
+                                    <span class="precio-unitario" data-precio="<?php echo e($producto->precio); ?>">
+                                        $ <?php echo e(number_format($producto->precio, 4, ',', '.')); ?>
+
                                     </span>
                                 </td>
                                 <td class="text-end">
-                                    <span class="subtotal-producto" data-subtotal="{{ $producto->subtotal }}">
-                                        $ {{ number_format($producto->subtotal, 4, ',', '.') }}
+                                    <span class="subtotal-producto" data-subtotal="<?php echo e($producto->subtotal); ?>">
+                                        $ <?php echo e(number_format($producto->subtotal, 4, ',', '.')); ?>
+
                                     </span>
                                 </td>
                             </tr>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </tbody>
                     </table>
                 </div>
             </div>
-            @endif
+            <?php endif; ?>
             
             <!-- Totales COMPACTOS -->
             <div class="totals-card">
@@ -899,13 +908,14 @@
             </p>
             <p style="margin-bottom: 5px; font-size: 9px;">
                 <i class="fas fa-calendar-alt me-1"></i>
-                Generado el {{ now()->format('d/m/Y H:i') }} | 
+                Generado el <?php echo e(now()->format('d/m/Y H:i')); ?> | 
                 <i class="fas fa-user me-1"></i>
-                Usuario: {{ $orden->usuario->name ?? 'Sistema' }}
+                Usuario: <?php echo e($orden->usuario->name ?? 'Sistema'); ?>
+
             </p>
             <p style="font-size: 8px; color: #999;">
                 <i class="fas fa-info-circle me-1"></i>
-                Documento oficial - N° Control: <span class="nro-control-formateado">{{ $nroControlFormateado }}</span> | 
+                Documento oficial - N° Control: <span class="nro-control-formateado"><?php echo e($nroControlFormateado); ?></span> | 
                 <span id="tasa-footer">Tasa: Bs. 0,0000</span>
             </p>
         </div>
@@ -1094,16 +1104,16 @@ function mostrarValorNegativoFormateadoCliente(elementId, valorDolares, tasa) {
 document.addEventListener('DOMContentLoaded', function() {
     // Obtener configuración desde PHP
     const config = {
-        aplicaIVA: @json($calculos['aplicaIVA'] ?? false),
-        aplicaIvaDeduccion: @json($calculos['aplicaIvaDeduccion'] ?? false),
-        tasa: parseNumberES(@json($calculos['tasa'] ?? '0')),
-        totalGeneral: @json($orden->totalGeneral ?? 0)
+        aplicaIVA: <?php echo json_encode($calculos['aplicaIVA'] ?? false, 15, 512) ?>,
+        aplicaIvaDeduccion: <?php echo json_encode($calculos['aplicaIvaDeduccion'] ?? false, 15, 512) ?>,
+        tasa: parseNumberES(<?php echo json_encode($calculos['tasa'] ?? '0', 15, 512) ?>),
+        totalGeneral: <?php echo json_encode($orden->totalGeneral ?? 0, 15, 512) ?>
     };
      // Pasar el tipo de documento desde el backend
-    const tipoDocumento = @json(config('app.tipo_documento', 'Orden de Compra'));
+    const tipoDocumento = <?php echo json_encode(config('app.tipo_documento', 'Orden de Compra'), 512) ?>;
     
     // Actualizar título
-    document.title = `${tipoDocumento} {{ $nroControlFormateado }}`;
+    document.title = `${tipoDocumento} <?php echo e($nroControlFormateado); ?>`;
     
     
     // Calcular valores SIN REDONDEO
@@ -1186,7 +1196,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const opt = {
             margin: [0.3, 0.3, 0.3, 0.3],
-            filename: 'Orden_Compra_{{ $nroControlFormateado }}.pdf',
+            filename: 'Orden_Compra_<?php echo e($nroControlFormateado); ?>.pdf',
             image: { type: 'jpeg', quality: 0.95 },
             html2canvas: { 
                 scale: 2,
@@ -1227,4 +1237,4 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 </body>
-</html>
+</html><?php /**PATH /var/www/html/resources/views/plantilla/orden.blade.php ENDPATH**/ ?>

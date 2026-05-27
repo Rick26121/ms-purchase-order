@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Proveedor;
 use App\Models\Unidad;
-use App\Models\metodoP;
+use App\Models\MetodoP;
 use App\Models\Sucursal;
 use App\Models\OrdenCompra;
 use App\Models\Responsable;

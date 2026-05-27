@@ -47,5 +47,8 @@ RUN npm install && npm run build || true
 RUN chown -R www-data:www-data storage bootstrap/cache
 
 EXPOSE 9000
+RUN php artisan view:clear || true
+RUN php artisan config:clear || true
+RUN php artisan cache:clear || true
 
 CMD ["php-fpm"]
