@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use App\Services\TasaCambioService;
+use Illuminate\Pagination\Paginator; 
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -14,6 +15,7 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+         Paginator::useBootstrapFive();
         // Registrar filtro para el menú de AdminLTE
         $this->app->resolving('adminlte', function ($adminlte, $app) {
             $tasaService = app(TasaCambioService::class);

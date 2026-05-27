@@ -1,0 +1,68 @@
+  .badge {
+        font-size: 0.75rem;
+        padding: 0.4rem 0.6rem;
+        border-radius: 0.25rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    .badge:hover {
+        opacity: 0.8;
+        transform: scale(1.05);
+    }
+    .status-pendiente {
+        background-color: #ffc107;
+        color: #212529;
+    }
+    .status-aprobado {
+        background-color: #28a745;
+        color: white;
+    }
+    .status-rechazado {
+        background-color: #dc3545;
+        color: white;
+    }
+    .status-procesado {
+        background-color: #17a2b8;
+        color: white;
+    }
+    .status-completado {
+        background-color: #6f42c1;
+        color: white;
+    }
+    .text-right {
+        text-align: right;
+    }
+    .table th {
+        background-color: #f8f9fa;
+    }
+    .btn-action {
+        margin: 0 2px;
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+    }
+    /* Estilos para los radio buttons */
+    .form-check-input:checked {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+    .form-check {
+        padding-left: 0;
+    }
+    .form-check-label {
+        margin-left: 25px;
+    }
+    /* Estilo para botones agrupados */
+    .btn-group {
+        display: flex;
+        flex-wrap: nowrap;
+    }
+    /* Ajuste para card-tools */
+    .card-tools {
+        display: flex;
+        align-items: center;
+    }
+    /* Botón de imprimir más discreto */
+    .btn-outline-primary.btn-sm {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+    }

@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  nginx:
+    image: nginx:alpine
+    container_name: misuper_nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/var/www/html
+      - ./default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - php
+    networks:
+      - misuper
+
+  php:
+    build: .
+    container_name: misuper_php
+    volumes:
+      - ./:/var/www/html
+    networks:
+      - misuper
+
+networks:
+  misuper:
+    driver: bridge

@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relación Diaria de Compras CZ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f8f5f2;
+            color: #333;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(to right, #6a0a1e, #8a1128);
+            color: white;
+            padding: 20px 30px;
+            border-bottom: 5px solid #d4a574;
+        }
+        
+        .title {
+            font-size: 24px;
+            font-weight: 700;
+            text-align: center;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 16px;
+            text-align: center;
+            opacity: 0.9;
+        }
+        
+        .report-info {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .info-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .info-label {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+        
+        .info-value {
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            padding: 20px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        
+        thead {
+            background-color: #8a1128;
+            color: white;
+        }
+        
+        th {
+            padding: 12px 10px;
+            text-align: left;
+            font-weight: 600;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        th:last-child {
+            border-right: none;
+        }
+        
+        tbody tr {
+            border-bottom: 1px solid #eee;
+            transition: background-color 0.2s;
+        }
+        
+        tbody tr:nth-child(even) {
+            background-color: #fcf8f5;
+        }
+        
+        tbody tr:hover {
+            background-color: #f9ece5;
+        }
+        
+        td {
+            padding: 10px;
+            border-right: 1px solid #eee;
+        }
+        
+        td:last-child {
+            border-right: none;
+        }
+        
+        .beneficiario {
+            font-weight: 600;
+            color: #6a0a1e;
+        }
+        
+        .totals {
+            display: flex;
+            justify-content: flex-end;
+            padding: 20px;
+            background-color: #f9f3ee;
+            border-top: 3px solid #d4a574;
+        }
+        
+        .total-box {
+            background-color: white;
+            border-radius: 6px;
+            padding: 15px 25px;
+            margin-left: 20px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+            border-left: 4px solid #8a1128;
+            min-width: 200px;
+        }
+        
+        .total-label {
+            font-size: 14px;
+            color: #777;
+            margin-bottom: 8px;
+        }
+        
+        .total-value {
+            font-size: 22px;
+            font-weight: 700;
+            color: #6a0a1e;
+        }
+        
+        .footer {
+            padding: 15px 30px;
+            background-color: #f1e9e3;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+            border-top: 1px solid #ddd;
+        }
+        
+        .footer i {
+            color: #8a1128;
+            margin: 0 5px;
+        }
+        
+        @media (max-width: 768px) {
+            .report-info {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .totals {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .total-box {
+                margin-left: 0;
+                width: 100%;
+            }
+            
+            th, td {
+                padding: 8px 6px;
+                font-size: 12px;
+            }
+        }
+        
+        .print-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: #8a1128;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(138, 17, 40, 0.3);
+            transition: all 0.3s;
+            z-index: 100;
+        }
+        
+        .print-btn:hover {
+            background-color: #6a0a1e;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="title">
+                <i class="fas fa-file-invoice-dollar"></i> RELACIÓN DIARIA DE COMPRAS CZ
+            </div>
+            <div class="subtitle">Sistema de Control de Compras</div>
+            
+            <div class="report-info">
+                <div class="info-item">
+                    <span class="info-label">Fecha del Reporte:</span>
+                    <span class="info-value">01-12-2025</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Generado por:</span>
+                    <span class="info-value">NORALY COLMENAREZ</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Total de Registros:</span>
+                    <span class="info-value">20</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>FECHA</th>
+                        <th>CORRELATIVO</th>
+                        <th>FACTURA N°</th>
+                        <th>BENEFICIARIO</th>
+                        <th>PROVEEDORES</th>
+                        <th>MONTO EN BS</th>
+                        <th>MONTO EN $</th>
+                        <th>TASA USADA</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>01/12/2025</td>
+                        <td>CZ20476</td>
+                        <td>17750</td>
+                        <td class="beneficiario">MI SUPER 48 CON 18</td>
+                        <td>HIERRO EXPRESS</td>
+                        <td>79.933,45</td>
+                        <td>360,52</td>
+                        <td>247.3003</td>
+                    </tr>
+                    <tr>
+                        <td>01/12/2025</td>
+                        <td>CZ20498</td>
+                        <td></td>
+                        <td class="beneficiario">MI SUPER 48 CON 18</td>
+                        <td>LUIS PEREZ ARENA</td>
+                        <td>51.438,46</td>
+                        <td>208,00</td>
+                        <td>247.3003</td>
+                    </tr>
+                    <tr>
+                        <td>01/12/2025</td>
+                        <td>CZ20501</td>
+                        <td>NE 0531</td>
+                        <td class="beneficiario">MI SUPER 48 CON 18</td>
+                        <td>FERRETERIA MST</td>
+                        <td>25.500</td>
+                        <td>103,11</td>
+                        <td>247.3003</td>
+                    </tr>
+                    <tr>
+                        <td>01/12/2025</td>
+                        <td>CZ20502</td>
+                        <td>20652</td>
+                        <td class="beneficiario">HOTEL RITZ</td>
+                        <td>CONSTRUFF DEL ESTE</td>
+                        <td>38.592,99</td>
+                        <td>174,06</td>
+                        <td>247.3003</td>
+                    </tr>
+                    <tr>
+                        <td>01/12/2025</td>
+                        <td>CZ20504</td>
+                        <td>18022</td>
+                        <td class="beneficiario">MI SUPER AV LARA</td>
+                        <td>ALUMINOS DIALCA A</td>
+                        <td>18.438,09</td>
+                        <td>83,16</td>
+                        <td>247.3003</td>
+                    </tr>
+                    <tr>
+                        <td>01/12/2025</td>
+                        <td>CZ20505</td>
+                        <td>8352</td>
+                        <td class="beneficiario">RESTAURANT AV MADRID</td>
+                        <td>PINTURAS BARRETO, C.A.</td>
+                        <td>6.208,08</td>
+                        <td>28,00</td>
+                        <td>247.3003</td>
+                    </tr>
+                    <tr>
+                        <td>01/12/2025</td>
+                        <td>CZ20506</td>
+                        <td>88</td>
+                        <td class="beneficiario">MI SUPER 48 CON 18</td>
+                        <td>FERREMATERIALES VENELCO, C.A.</td>
+                        <td>54.010,32</td>
+                        <td>243,60</td>
+                        <td>247.3003</td>
+                    </tr>
+                    <tr>
+                        <td>01/12/2025</td>
+                        <td>CZ20507</td>
+                        <td>16021</td>
+                        <td class="beneficiario">MI SUPER 21 CON 11</td>
+                        <td>ALUMINOS DIALCA A</td>
+                        <td>22.761,52</td>
+                        <td>102,66</td>
+                        <td>247.3003</td>
+                    </tr>
+                    <tr>
+                        <td>01/12/2025</td>
+                        <td>CZ20508</td>
+                        <td>46</td>
+                        <td class="beneficiario">HOTEL RITZ</td>
+                        <td>OB ELECTRICA, CA (C.O.D.E.B.I.C.A. C.A.)</td>
+                        <td>57.870,79</td>
+                        <td>261,01</td>
+                        <td>247.3003</td>
+                    </tr>
+                    <tr>
+                        <td>01/12/2025</td>
+                        <td>CZ20510</td>
+                        <td>NE 0534</td>
+                        <td class="beneficiario">MI SUPER 48 CON 18</td>
+                        <td>FERRETERIA MST</td>
+                        <td>8.500</td>
+                        <td>34,37</td>
+                        <td>247.3003</td>
+                    </tr>
+                    <tr>
+                        <td>01/12/2025</td>
+                        <td>CZ20511</td>
+                        <td>753</td>
+                        <td class="beneficiario">HOTEL RITZ</td>
+                        <td>SEIPCA</td>
+                        <td>2.826,55</td>
+                        <td>12,75</td>
+                        <td>247.3003</td>
+                    </tr>
+                    <tr>
+                        <td>01/12/2025</td>
+                        <td>CZ20512</td>
+                        <td>30529</td>
+                        <td class="beneficiario">HOTEL RITZ</td>
+                        <td>COMERCIAL LA COLMENA</td>
+                        <td>17.465,57</td>
+                        <td>78,77</td>
+                        <td>247.3003</td>
+                    </tr>
+                    <tr>
+                        <td>01/12/2025</td>
+                        <td>CZ20513</td>
+                        <td>1293</td>
+                        <td class="beneficiario">HOTEL RITZ</td>
+                        <td>REFRIGERACION EL NECTAR</td>
+                        <td>16.717,5</td>
+                        <td>75,40</td>
+                        <td>247.3003</td>
+                    </tr>
+                    <tr>
+                        <td>01/12/2025</td>
+                        <td>CZ20514</td>
+                        <td>50</td>
+                        <td class="beneficiario">MI SUPER 48 CON 18</td>
+                        <td>OB ELECTRICA, CA (C.O.D.E.B.I.C.A. C.A.)</td>
+                        <td>39.430,12</td>
+                        <td>177,84</td>
+                        <td>247.3003</td>
+                    </tr>
+                    <tr>
+                        <td>01/12/2025</td>
+                        <td>CZ20515</td>
+                        <td>58190</td>
+                        <td class="beneficiario">HOTEL RITZ</td>
+                        <td>MANGOCENTER, C.A.</td>
+                        <td>5.111,99</td>
+                        <td>20,67</td>
+                        <td>247.3003</td>
+                    </tr>
+                    <tr>
+                        <td>01/12/2025</td>
+                        <td>CZ20564</td>
+                        <td>30512</td>
+                        <td class="beneficiario">HOTEL RITZ</td>
+                        <td>COMERCIAL LA COLMENA</td>
+                        <td>541,59</td>
+                        <td>2,19</td>
+                        <td>247.3003</td>
+                    </tr>
+                    <tr>
+                        <td>01/12/2025</td>
+                        <td>CZ20565</td>
+                        <td>21112</td>
+                        <td class="beneficiario">GRUPO MI SUPER</td>
+                        <td>ARAGAS C.A</td>
+                        <td>10.040,38</td>
+                        <td>40,80</td>
+                        <td>247.3003</td>
+                    </tr>
+                    <tr>
+                        <td>01/12/2025</td>
+                        <td>CZ20566</td>
+                        <td>172290</td>
+                        <td class="beneficiario">HOTEL RITZ</td>
+                        <td>FERRETERIA ERA C.A.</td>
+                        <td>12.983,25</td>
+                        <td>52,50</td>
+                        <td>247.3003</td>
+                    </tr>
+                    <tr>
+                        <td>01/12/2025</td>
+                        <td>CZ20567</td>
+                        <td></td>
+                        <td class="beneficiario">HOTEL RITZ</td>
+                        <td>MARIANELA PACHECO SOTO</td>
+                        <td>17.805,62</td>
+                        <td>72,00</td>
+                        <td>247.3003</td>
+                    </tr>
+                    <tr>
+                        <td>01/12/2025</td>
+                        <td>CZ20589</td>
+                        <td>30526</td>
+                        <td class="beneficiario">HOTEL RITZ</td>
+                        <td>COMERCIAL LA COLMENA</td>
+                        <td>1.084,37</td>
+                        <td>4,38</td>
+                        <td>247.3003</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="totals">
+            <div class="total-box">
+                <div class="total-label">TOTAL MONTO EN BS:</div>
+                <div class="total-value">487.260,66</div>
+            </div>
+            <div class="total-box">
+                <div class="total-label">TOTAL MONTO EN $:</div>
+                <div class="total-value">2.135,61</div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p><i class="fas fa-info-circle"></i> Reporte generado automáticamente por el Sistema de Compras CZ</p>
+            <p><i class="fas fa-clock"></i> Última actualización: 01-12-2025 15:43</p>
+        </div>
+    </div>
+    
+    <button class="print-btn" onclick="window.print()" title="Imprimir reporte">
+        <i class="fas fa-print"></i>
+    </button>
+    
+    <script>
+        // Añadir funcionalidad de resaltado de filas al pasar el mouse
+        document.addEventListener('DOMContentLoaded', function() {
+            const rows = document.querySelectorAll('tbody tr');
+            
+            rows.forEach(row => {
+                row.addEventListener('mouseenter', function() {
+                    this.style.backgroundColor = '#f9ece5';
+                });
+                
+                row.addEventListener('mouseleave', function() {
+                    if (Array.from(rows).indexOf(this) % 2 === 0) {
+                        this.style.backgroundColor = '#fcf8f5';
+                    } else {
+                        this.style.backgroundColor = 'white';
+                    }
+                });
+            });
+            
+            // Mostrar mensaje al imprimir
+            window.addEventListener('beforeprint', function() {
+                alert('Preparando el documento para impresión... Asegúrese de seleccionar "Ajustar al ancho de la página" en la configuración de impresión.');
+            });
+        });
+    </script>
+</body>
+</html>
